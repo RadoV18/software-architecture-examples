@@ -1,0 +1,67 @@
+:host {
+  width: 75%;
+  background-color: lighten(#11112E, 5%);
+  border-radius: 0.75rem;
+  padding: 1rem;
+  box-shadow: 0 0 10px #11112E;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+
+  thead {
+    background-color: lighten(#11112E, 15%);
+    color: #efefef;
+
+    tr th {
+      padding: 0.5rem;
+    }
+  }
+
+  tbody tr {
+    td {
+      text-align: center;
+      padding: 0.75rem;
+    }
+
+    &:nth-child(odd) {
+      background-color: lighten(#11112E, 2%);
+
+    }
+
+    &:nth-child(even) {
+      background-color: darken(#11112E, 2%);
+
+    }
+  }
+
+  .actions {
+    display: flex;
+    justify-content: space-between;
+    gap: 0.5rem;
+
+    button:last-child {
+      flex: 1;
+    }
+  }
+}
+
+.pill {
+  display: inline-block;
+  height: 1.5rem;
+  border-radius: 1.5rem;
+  font-size: 0.8rem;
+  line-height: 1.5rem;
+  padding: 0 0.5rem;
+  width: 3rem;
+
+  &.pill-done {
+    background-color: #4CAF50;
+  }
+
+  &.pill-pending {
+    background-color: #fc3a3a;
+  }
+}
