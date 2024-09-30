@@ -8,6 +8,8 @@ import bo.edu.ucb.todo.mapper.TodoMapper;
 import bo.edu.ucb.todo.repository.TodoRepository;
 import bo.edu.ucb.todo.service.TodoService;
 import lombok.AllArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,6 +20,7 @@ import java.util.Optional;
 public class TodoServiceImpl implements TodoService {
 
     private final TodoRepository todoRepository;
+    private static final Logger logger = LoggerFactory.getLogger(TodoServiceImpl.class);
 
     @Override
     public TodoResDto create(TodoReqDto todoReqDto) {
@@ -61,6 +64,7 @@ public class TodoServiceImpl implements TodoService {
     private Todo getTodoById(Long id) {
         Optional<Todo> todo = todoRepository.findById(id);
         if(todo.isEmpty()) {
+            logger.error("Todo {} not found", id);
             throw new TodoNotFoundException("Todo not found");
         }
         return todo.get();
