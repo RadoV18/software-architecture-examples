@@ -1,0 +1,54 @@
+networks:
+  pocketnet:
+    driver: bridge
+    name: library-app-network
+
+services:
+  keycloak:
+    image: quay.io/keycloak/keycloak:24.0
+    container_name: keycloak
+    networks:
+      - pocketnet
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./keycloak-providers:/opt/keycloak/providers
+    environment:
+      - KEYCLOAK_ADMIN=admin
+      - KEYCLOAK_ADMIN_PASSWORD=admin
+    command: >
+      start-dev
+      --spi-events-listener-user-register-event-listener-rabbit-host=${RABBITMQ_HOST}
+      --spi-events-listener-user-register-event-listener-rabbit-port=${RABBITMQ_PORT}
+      --spi-events-listener-user-register-event-listener-rabbit-user=${RABBITMQ_USERNAME}
+      --spi-events-listener-user-register-event-listener-rabbit-password=${RABBITMQ_PASSWORD}
+      --spi-events-listener-user-register-event-listener-virtual-host=${RABBITMQ_VIRTUAL_HOST}
+      --spi-events-listener-user-activity-event-listener-rabbit-host=${RABBITMQ_HOST}
+      --spi-events-listener-user-activity-event-listener-rabbit-port=${RABBITMQ_PORT}
+      --spi-events-listener-user-activity-event-listener-rabbit-user=${RABBITMQ_USERNAME}
+      --spi-events-listener-user-activity-event-listener-rabbit-password=${RABBITMQ_PASSWORD}
+      --spi-events-listener-user-activity-event-listener-virtual-host=${RABBITMQ_VIRTUAL_HOST}
+    depends_on:
+      - rabbitmq
+
+  rabbitmq:
+    image: rabbitmq:3.13.0-management-alpine
+    container_name: rabbitmq
+    networks:
+      - pocketnet
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      - RABBITMQ_DEFAULT_USER=${RABBITMQ_USERNAME}
+      - RABBITMQ_DEFAULT_PASS=${RABBITMQ_PASSWORD}
+      - RABBITMQ_DEFAULT_VHOST=${RABBITMQ_VIRTUAL_HOST}
+
+  mailhog:
+    image: mailhog/mailhog
+    container_name: mailhog
+    networks:
+      - pocketnet
+    ports:
+      - "1025:1025"
+      - "8025:8025"
